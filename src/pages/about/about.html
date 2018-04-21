@@ -1,11 +1,16 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      About
-    </ion-title>
-  </ion-navbar>
+	<ion-navbar>
+		<ion-title>{{'modern_privacy_about_us'|static}}</ion-title>
+		<ion-buttons end>
+			<button ion-button clear (click)="gotoContact()" class="disable-hover">
+				<span text-capitalize>{{'about.contact'|translate}}</span>
+			</button>
+		</ion-buttons>
+	</ion-navbar>
 </ion-header>
 
 <ion-content padding>
-
+	<div [innerHTML]="'modern_description_about_us'|static"></div>
 </ion-content>
+
+<ion-footer><ion-toolbar><footer-tabs></footer-tabs></ion-toolbar></ion-footer>

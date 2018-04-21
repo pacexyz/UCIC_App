@@ -1,0 +1,10 @@
+<button ion-button color="dark" icon-only clear (click)="gotoCart()" class="disable-hover">
+	<div>
+		<ion-badge item-right absolute>{{cart.count}}</ion-badge>
+		<ion-icon name="{{icon}}"></ion-icon>
+	</div>
+	<div text-left float-right class="info-cart">
+		<div>Total:</div>
+		<span primary>{{cart.total|price}}</span>
+	</div>
+</button>

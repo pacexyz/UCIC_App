@@ -1,0 +1,151 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{'checkout.title'|translate}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content secondary-bg>
+<!-- Address -->
+<ion-list class="address" *ngIf="user">
+	<ion-item-divider color="light">
+		<ion-icon name="icon-location" item-left></ion-icon>
+		<ion-label><b dark>{{'checkout.address'|translate}}</b></ion-label>
+		<button ion-button clear item-right [navPush]="AddressPage" class="disable-hover">
+			<span>{{'checkout.change'|translate}}</span>
+		</button>
+	</ion-item-divider>
+	<hide-show color="light" no-border>
+		<span this-title><b>{{'checkout.delivery_address'|translate}}</b></span>
+		<div this-content>
+			<p><b>{{user.shipping_first_name}} {{user.shipping_last_name}}</b></p>
+			<p>{{user.shipping_company}}</p>
+			<p>{{user.shipping_address_1}} {{user.shipping_address_2}}</p>
+			<p>{{user.shipping_city}}, {{user.shipping_state}} {{user.shipping_postcode}}</p>
+			<p>{{user.shipping_country}}</p>
+		</div>
+	</hide-show> 
+	<hide-show color="light" no-border>
+		<span this-title><b>{{'checkout.billing_address'|translate}}</b></span>
+		<div this-content>
+			<p><b>{{user.billing_first_name}} {{user.billing_last_name}}</b></p>
+			<p>{{user.billing_company}}</p>
+			<p>{{user.billing_address_1}} {{user.billing_address_2}}</p>
+			<p>{{user.billing_city}}, {{user.billing_state}} {{user.billing_postcode}}</p>
+			<p>{{user.billing_country}}</p>
+		</div>
+	</hide-show> 
+</ion-list>
+<!-- Shipping method -->
+<ion-list *ngIf="data && data.shipping && data.shipping.length > 0">
+	<hide-show color="light" show="true" no-border>
+		<span this-title>
+			<ion-icon name="icon-time" icon-big></ion-icon>
+			<b dark>{{'checkout.shipping_method'|translate}}</b>
+		</span>
+		<div this-content>
+			<ion-list radio-group [(ngModel)]="shipping" class="list-shipping" no-margin>
+				<button ion-item detail-none *ngFor="let item of data.shipping" no-padding (click)="changeShipping(item)">
+					<ion-label>
+						<span dark>{{item.title}}:</span>
+						<span *ngIf="item.price==0" success>{{'checkout.free'|translate}}</span>
+						<span *ngIf="item.price!=0" success>{{item.price|price}}</span>
+					</ion-label>
+					<ion-radio [value]="item.id" mode="ios"></ion-radio>
+				</button>
+			</ion-list>
+		</div>
+	</hide-show> 
+</ion-list>
+<!-- Order detail -->
+<ion-list *ngIf="cart && 0<(cart|ObjectToArray).length">
+	<hide-show color="light" show="true" no-border>
+		<div width-100 this-title text-left>
+			<ion-icon name="icon-list-4" icon-big></ion-icon>
+			<b dark>{{'checkout.order_detail'|translate}}</b>
+			<span float-right margin-right>{{(cart|ObjectToArray).length}} {{'checkout.item'|translate}}</span>
+		</div>
+		<div this-content>
+			<!-- List product -->
+			<ion-list light-bg class="list-product" padding-vertical no-margin>
+			  <ion-row *ngFor="let product of (cart|ObjectToArray)" no-padding relative class="item-product">
+				<ion-col width-25 no-padding>
+					<img *ngIf="product.images" [src]="product.images" />
+					<img *ngIf="!product.images" src="assets/images/no-image.png" />
+				</ion-col>
+				<ion-col no-padding margin-horizontal>
+					<span dark>{{product.name}}</span>
+					<ion-row wrap padding-4-vertical>
+						<ion-col width-50 no-padding *ngFor="let attr of (product.attributes|ObjectToArray)">
+							<span>{{attr.name}}: </span><b text-capitalize>{{attr.option}}</b>
+						</ion-col>
+					</ion-row>
+					<ion-row class="product-quantity" wrap>
+						<ion-col no-padding>
+							<span *ngIf="product.sale_price" text-through>{{product.regular_price|price}}</span>
+							<b dark> {{product.price||0|price}} x{{product.quantity}}</b>
+						</ion-col>
+					</ion-row>
+				</ion-col>
+			  </ion-row>
+			</ion-list>
+			<div light-bg dark class="totals" *ngIf="data" padding-bottom>
+				<div margin-bottom><b dark text-uppercase>{{'checkout.totals'|translate}}</b></div>
+				<ion-row>
+					<ion-col>{{'checkout.total_price'|translate}}</ion-col>
+					<ion-col text-right>{{data._total|price}}</ion-col>
+				</ion-row>
+				<ion-row *ngIf="shipping">
+					<ion-col>{{'checkout.shipping'|translate}}</ion-col>
+					<ion-col text-right *ngIf="data._shipping==0" success>{{'checkout.free'|translate}}</ion-col>
+					<ion-col text-right *ngIf="0<data._shipping">{{data._shipping|price}}</ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col>{{'checkout.tax'|translate}}</ion-col>
+					<ion-col text-right>{{(data._tax+data._shipping_tax)|price}}</ion-col>
+				</ion-row>
+				<ion-row *ngFor="let coupon of coupon">
+					<ion-col width-66>
+						<span>{{'checkout.coupon_code'|translate}}</span>
+						<span primary> ({{coupon.code}}: -{{((coupon.value*1)/data._total*100)|number:'1.2-2'}}%) </span>
+					</ion-col>
+					<ion-col text-right primary>-{{coupon.value|price}}</ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col><b dark>{{'checkout.order_total'|translate}}</b></ion-col>
+					<ion-col text-right><b dark>{{total()|price}}</b></ion-col>
+				</ion-row>
+			</div>
+		</div>
+	</hide-show> 
+</ion-list>
+<!-- Payment method -->
+<ion-list *ngIf="data && data.payment">
+	<hide-show color="light" show="true" no-border>
+		<span this-title>
+			<ion-icon name="icon-wallet" icon-big></ion-icon>
+			<b dark>{{'checkout.payment_method'|translate}}</b>
+		</span>
+		<div this-content>
+			<ion-list radio-group [(ngModel)]="payment" class="list-payment" no-margin>
+				<button ion-item detail-none *ngFor="let item of data.payment" no-padding (click)="payment=item.id">
+					<ion-label><span dark>{{item.title}}</span></ion-label>
+					<ion-radio [value]="item.id"></ion-radio>
+				</button>
+			</ion-list>
+		</div>
+	</hide-show> 
+</ion-list>
+<ion-list padding light-bg no-margin>
+	<div class="checkout-term">
+		<ion-checkbox class="check-allow" mode="md" [(ngModel)]="checkCondition"></ion-checkbox>
+		<div dark class="term-note">{{'checkout.condition'|translate}}<span (click)="showTerms()" primary>{{'checkout.term' | translate}}</span></div>
+	</div>
+<!-- 	<ion-row *ngIf="data">
+		<ion-col><b dark>{{'checkout.order_total'|translate}}</b></ion-col>
+		<ion-col text-right><b dark>{{total()|price}}</b></ion-col>
+	</ion-row> -->
+	<button block ion-button (click)="confirm()" [disabled]="(products && products.length<1) || !payment || !checkCondition">{{'checkout.confirm'|translate}}</button>
+</ion-list>
+</ion-content>
+
+<ion-footer><ion-toolbar><footer-tabs></footer-tabs></ion-toolbar></ion-footer>

@@ -1,0 +1,13 @@
+<ion-header>
+	<ion-buttons end margin-0 relative>
+		<button ion-button clear margin-0  class="disable-hover" (tap)="openPopup()">
+			<ion-icon class="icon-closepopup" name="ios-close"></ion-icon>
+		</button>
+	</ion-buttons>
+</ion-header>
+
+<ion-content *ngIf="data" class="popup-content">
+	<div class="popup-body" (tap)="openPopup(true)">
+		<img [src]="data" />
+	</div>
+</ion-content>

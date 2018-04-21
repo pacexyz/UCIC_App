@@ -1,0 +1,232 @@
+<ion-header (swipe)="onSwipeContent($event)">
+  <ion-navbar>
+    <ion-item mode="md" class="search-input">
+      <ion-input #TextInput autocomplete="on" autocorrect = "on" placeholder="{{'search.title'|translate}}" clearInput [(ngModel)]="keyword" (keyup.enter)="search()">
+      </ion-input>
+    </ion-item>
+    <ion-buttons end>
+      <button-cart #cart icon="icon-bag"></button-cart>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar class="header-filter">
+    <!-- <button *ngIf="categories && 0<categories.length" ion-button clear color="dark" no-margin (click)="openCategory()" class="disable-hover button-drop">
+      <span [attr.primary]="filter.open=='category' ? true : null">{{'categories.category'|translate}}</span>
+      <ion-icon name="md-arrow-dropdown"></ion-icon>
+    </button> -->
+    <button ion-button clear color="dark" no-margin (click)="openFilter()" class="disable-hover button-drop">
+      <span [attr.primary]="filter.open=='filter' ? true : null">{{'categories.filter'|translate}}</span>
+      <ion-icon name="md-arrow-dropdown"></ion-icon>
+    </button>
+    <button ion-button clear color="dark" no-margin (click)="openSort()" class="disable-hover button-drop">
+      <span [attr.primary]="filter.open=='sort' ? true : null">{{'categories.sort'|translate}}</span>
+      <ion-icon name="md-arrow-dropdown"></ion-icon>
+    </button>
+    <div float-right>
+      <button float-right ion-button clear color="dark" no-margin class="disable-hover"
+      [ngClass]="{'disabled':filter.grid}" (click)="filter.grid=false">
+        <ion-icon name="icon-order"></ion-icon>
+      </button>
+      <button float-right ion-button clear color="dark" no-margin class="disable-hover"
+      [ngClass]="{'disabled':!filter.grid}" (click)="filter.grid=true">
+        <ion-icon name="icon-grid-out"></ion-icon>
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <!-- Filter -->
+  <div *ngIf="filter.open=='filter'" ion-fixed width-100 height-100 light-bg>
+    <ion-scroll width-100 height-100 scrollY="true">
+      <ion-list>
+        <!-- Range Price -->
+        <hide-show color="light">
+          <span this-title>
+            <b>{{'categories.price_range'|translate}}</b>
+            <span>{{range.lower|price}}</span><span *ngIf="0<range.upper"> - {{range.upper|price}}</span>
+          </span>
+          <ion-range mode="md" this-content dualKnobs="true" [min]="attributes.min_price" [max]="attributes.max_price" [(ngModel)]="range">
+          </ion-range>
+        </hide-show> 
+        <hide-show color="light" *ngFor="let attr of attributes.attributes" class="filter-attribute">
+          <span this-title><b text-capitalize [innerHTML]="attr.name"></b></span>
+          <ion-row wrap this-content padding-bottom>
+            <ion-col width-50 *ngFor="let term of attr.term" no-padding>
+              <ion-item mode="md" no-padding>
+                <ion-label [innerHTML]="term.name"></ion-label>
+                <ion-checkbox [(ngModel)]="filter.value[attr.slug][term.slug]"></ion-checkbox>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </hide-show> 
+        <hide-show color="light" *ngFor="let attr of attributes.custom" class="filter-attribute">
+          <span this-title><b text-capitalize [innerHTML]="attr.name"></b></span>
+          <ion-row wrap this-content padding-bottom>
+            <ion-col width-50 *ngFor="let term of attr.term|ObjectToArray" no-padding>
+              <ion-item mode="md" no-padding>
+                <ion-label [innerHTML]="term.name"></ion-label>
+                <ion-checkbox [(ngModel)]="filter.valueCustom[attr.slug][term.slug]"></ion-checkbox>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </hide-show> 
+      </ion-list>
+    </ion-scroll>
+  </div>
+  <!-- Sort -->
+  <div *ngIf="filter.open=='sort'" ion-fixed width-100 height-100 mark tappable (click)="filter.open=null">
+    <ion-list radio-group [(ngModel)]="sort" class="list-sort" (ngModelChange)="filter.open=null">
+      <ion-item *ngFor="let option of 'categories.sortData'|translate">
+        <ion-label [innerHTML]="option.text"></ion-label>
+        <ion-radio [value]="option.value"></ion-radio>
+      </ion-item>
+    </ion-list>   
+  </div>
+  <!-- No result -->
+  <ion-row center ion-fixed width-100 height-100 *ngIf="noResuilt" (swipe)="onSwipeContent($event)">
+    <div width-100 text-center>{{'search.no_result'|translate}}</div>
+  </ion-row>
+  <!-- Has result -->
+ <!-- List products -->
+<ion-row padding-8 wrap *ngIf="0< products.length" [ngClass]="{'filter-list':!filter.grid}" (swipe)="onSwipeContent($event)">
+  <ion-col padding-8 relative [attr.width-50]="filter.grid ? true : null" *ngFor="let product of products|orderBy:sort" class="product-block">
+<!--     <div>
+      <div relative float-left class="product-image" [navPush]="DetailPage" [navParams]="{id:product.id}">
+        <img float-left *ngIf="product.modernshop_images && product.modernshop_images[0].modern_square" [src]="product.modernshop_images[0].modern_square" />
+        <img float-left *ngIf="!product.modernshop_images || !product.modernshop_images[0].modern_square" src="assets/images/no-image.png" />
+        <div absolute bottom primary-bg product-sale *ngIf="product.sale_price && product.type!='variable' && product.type!='grouped'" class="sale">
+          <span light>{{(product.sale_price/product.regular_price*100)-100|number:'1.0-0'}}%</span>
+        </div>
+        <img absolute icon-sale *ngIf="(product.type=='variable'||product.type=='grouped') && product.on_sale" src="assets/images/icon-sale.png" />
+        <img absolute icon-outstock *ngIf="!product.in_stock" src="assets/images/outstock.png" />
+      </div>
+        <div float-left class="product-detail" width-100>
+            <div [navPush]="DetailPage" [navParams]="{id:product.id}">
+                <p [attr.no-margin]="filter.grid ? null : true" float-left  width-100>
+                    <span *ngIf="product.type!='variable' && product.type!='grouped'" font-90>
+                        <b dark font-120>{{product.price*1||0|price}}</b>
+                        <span *ngIf="product.sale_price" margin-left text-through>{{product.regular_price*1|price}}</span>
+                        <img class="icon-check-cart" float-right style="width:20px;" src="assets/images/icon-check-cart.png" *ngIf="product.onCart" />
+                    </span>
+                    <span *ngIf="product.type=='variable' || product.type=='grouped'" font-90>
+                        <b dark font-120 [innerHTML]="product.price_html"></b>
+                        <img class="icon-check-cart" float-right style="width:20px;" src="assets/images/icon-check-cart.png" *ngIf="product.onCart" />
+                    </span>
+                </p>
+                <div [hidden]="filter.grid">
+                    <div class="rate">
+                        <div class="rating" [style.width]="product.average_rating*20+'%'"></div>
+                    </div>
+                </div>
+                <span float-left width-100 [innerHTML]="product.name"></span>
+                <div *ngIf="product.type=='variable' && 0< product.attributes.length" [hidden]="filter.grid">
+                    <div *ngFor="let attribute of product.attributes|filter:{variation:true}">
+                        <span [innerHTML]="attribute.name"></span>: 
+                        <span dark>{{attribute.options|ArrayJoin:', '}}</span>
+                    </div>
+                </div>
+                <div [hidden]="filter.grid" overflow>
+                    <div float-left primary no-wrap class="sale">{{'categories.sold'|translate}} {{product.total_sales}}</div>
+                </div>
+            </div>
+             <div class="button-cart-list" *ngIf="product.type!='variable' && product.type!='grouped' && product.type!='external'">
+                <button ion-button class="button-cart" [disabled]="!product.price" (tap)="addtoCart(product)">
+                    <div float-left width-100 font-weight-500>
+                        <ion-icon class="icon-cart-add" name="icon-iconcartadd" primary></ion-icon>
+                        <span primary class="add-to-cart">{{'categories.addtocart' | translate}}</span>
+                    </div>
+                </button>
+                <ion-icon *ngIf="cartArray[product.id] == product.id" float-right class="icon-cart-iconcartcheck" name="icon-iconcartcheck" primary></ion-icon>
+            </div>
+            <div class="button-cart-list-option" *ngIf="product.type=='variable' || product.type=='grouped' || product.type=='external'" [navPush]="DetailPage" [navParams]="{id:product.id}">
+                <button ion-button class="button-cart">
+                    <div float-left width-100 font-weight-500>
+                        <span class="add-to-cart">{{'categories.chooseoption' | translate}}</span>
+                    </div>
+                </button>
+            </div>
+        </div> 
+    </div>
+    <button ion-button absolute top clear no-margin (click)="changeFavorite(product)"
+    [color]="favorite[product.id] ? 'primary' : 'dark'" [hidden]="filter.grid" class="disable-hover favorite">
+        <ion-icon icon-big name="icon-favorite"></ion-icon>
+    </button> -->
+    <div [navPush]="DetailPage" [navParams]="{id:product.id}" relative class="product-image clearfix">
+      <img float-left *ngIf="product.modernshop_images && product.modernshop_images[0].modern_square" [src]="product.modernshop_images[0].modern_square" />
+      <img float-left *ngIf="!product.modernshop_images || !product.modernshop_images[0].modern_square" src="assets/images/no-image.png" />
+      <div absolute bottom primary-bg product-sale *ngIf="product.sale_price && product.type!='variable' && product.type!='grouped'" class="sale">
+        <span light>{{(product.sale_price/product.regular_price*100)-100|number:'1.0-0'}}%</span>
+      </div>
+      <img absolute icon-sale *ngIf="(product.type=='variable'||product.type=='grouped') && product.on_sale" src="assets/images/icon-sale.png" />
+    </div>
+    <div class="product-info clearfix">
+      <div [navPush]="DetailPage" [navParams]="{id:product.id}">
+        <p [attr.no-margin]="filter.grid ? null : true" width-100>
+          <span class="product-price" *ngIf="product.type!='variable' && product.type!='grouped'" font-90>
+            <b dark font-120>{{product.price*1||0|price}}</b>
+            <span *ngIf="product.sale_price" margin-left text-through>{{product.regular_price*1|price}}</span>
+          </span>
+          <span class="product-price" *ngIf="product.type=='variable' || product.type=='grouped'" font-90>
+            <b dark font-120 [innerHTML]="product.price_html"></b>
+          </span>
+        </p>
+        <div [hidden]="filter.grid">
+          <div class="rate">
+            <div class="rating" [style.width]="product.average_rating*20+'%'"></div>
+          </div>
+        </div>
+        <span class="product-title" dark [innerHTML]="product.name"></span>
+        <div *ngIf="product.type=='variable' && 0< product.attributes.length" [hidden]="filter.grid">
+          <div *ngFor="let attribute of product.attributes|filter:{variation:true}">
+            <span [innerHTML]="attribute.name"></span>: 
+            <span dark>{{attribute.options|ArrayJoin:', '}}</span>
+          </div>
+        </div>
+        <!-- <div [hidden]="filter.grid" overflow>
+          <div float-left primary no-wrap class="sale">{{'categories.sold'|translate}} {{product.total_sales}}</div>
+        </div> -->
+      </div>
+      <div class="button-cart-list" *ngIf="product.type!='variable' && product.type!='grouped' && product.type!='external'">
+        <button ion-button class="button-cart" [disabled]="!product.price" (tap)="addtoCart(product)">
+          <div float-left width-100 font-weight-500>
+            <ion-icon class="icon-cart-add" name="icon-iconcartadd" primary></ion-icon>
+            <span primary class="add-to-cart">{{'categories.addtocart' | translate}}</span>
+          </div>
+        </button>
+        <ion-icon *ngIf="cartArray[product.id] == product.id" float-right class="icon-cart-iconcartcheck" name="icon-iconcartcheck" primary></ion-icon>
+      </div>
+      <div class="button-cart-list-option" *ngIf="product.type=='variable' || product.type=='grouped' || product.type=='external'" [navPush]="DetailPage" [navParams]="{id:product.id}">
+        <button ion-button class="button-cart">
+          <div float-left width-100 font-weight-500>
+            <span class="add-to-cart">{{'categories.chooseoption' | translate}}</span>
+          </div>
+        </button>
+      </div>
+    </div>
+    <button ion-button absolute top right clear no-margin (click)="changeFavorite(product)"
+    [color]="favorite[product.id] ? 'primary' : 'dark'" [hidden]="filter.grid" class="disable-hover btn-favorite">
+        <ion-icon name="icon-favorite"></ion-icon>
+    </button>
+  </ion-col>
+</ion-row>
+<ion-infinite-scroll (ionInfinite)="load($event)" *ngIf="!over">
+  <ion-infinite-scroll-content></ion-infinite-scroll-content>
+</ion-infinite-scroll>
+</ion-content>
+<ion-footer (swipe)="onSwipeContent($event)">
+  <ion-toolbar>
+    <footer-tabs></footer-tabs>
+    <ion-row absolute width-100 height-100 top left light-bg [hidden]="filter.open!='filter'">
+      <ion-col no-padding height-100>
+        <button ion-button full height-100 color="secondary" (click)="reset()">
+          <span>{{'general.reset'|translate}}</span>
+        </button>
+      </ion-col>
+      <ion-col no-padding height-100>
+        <button ion-button full height-100 (click)="search()">
+          <span>{{'categories.done'|translate}}</span>
+        </button>
+      </ion-col>
+    </ion-row>
+    <div absolute width-100 height-100 top left mark [hidden]="filter.open!='sort' && filter.open!='category'" tappable (click)="filter.open=null"></div>
+  </ion-toolbar>
+</ion-footer>

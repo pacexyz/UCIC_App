@@ -1,0 +1,42 @@
+page-account {
+	.account-header{
+		[mark]{@include background-opacity(#000, 0.7);}
+		.account-avatar{
+			font-size:500%;
+			width:100px;
+			height:100px;
+			border-radius:50%;
+			overflow:hidden;
+		}
+		.button-back{
+			top:-20px;
+			left:-16px;
+		}
+		.button-signout{
+			top:-20px;
+			right:-16px;
+		}
+	}
+	.account-list{
+		.item{
+			border-bottom:1px solid #f3f3f3;
+			.icon{
+				font-size:22px;
+				line-height:28px
+			}
+			.item-inner{
+				border-bottom:none;
+				.toggle-md .toggle-checked{
+					background:#b2dfdb;
+					.toggle-inner{background-color:#3fbeb5}
+				}
+				.note{color:#9A9691}
+			}
+		}
+
+		.toggle  {
+			margin-right: 0;
+    		padding-right: 8px;
+		}
+	}
+}

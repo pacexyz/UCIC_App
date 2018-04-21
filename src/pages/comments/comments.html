@@ -1,0 +1,50 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>{{'comments.title'|translate}}</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+<div *ngIf="comments.reviews">
+	<!-- Ratings -->
+	<b dark>{{'comments.ratings_reviews'|translate}}</b>
+	<ion-row padding-vertical class="comments-statis">
+		<ion-col center width-33 text-center>
+			<h4 dark>
+				<span>{{comments.total/comments.reviews.length||0|number:'1.1-1'}}</span>
+				<ion-icon name="icon-star"></ion-icon>
+			</h4>
+			<span>{{comments.reviews.length}} {{'comments.rating'|translate}}</span>
+		</ion-col>
+		<ion-col border-left padding-horizontal>
+			<div *ngFor="let rating of comments.percent" class="percent" width-100 relative>
+				<div absolute top left dark>
+					<span>{{rating.rating}}</span>
+					<ion-icon name="icon-star"></ion-icon>
+				</div>
+				<div class="percent-background">
+					<div class="percent-value" [style.width]="rating.percent" [ngClass]="'rating'+rating.rating" height-100></div>
+				</div>
+			</div>
+		</ion-col>
+	</ion-row>
+	<button ion-button block color="primary" (click)="showRating()" [disabled]="!allow">
+		<span>{{'comments.button'|translate}}</span>
+	</button>
+	<!-- List reviews -->
+	<ion-list margin-vertical class="comments-review">
+		<ion-item mode="md" *ngFor="let review of comments.reviews" no-padding dark text-wrap>
+			<ion-avatar item-left float-left>
+				<img *ngIf="review.link_avatar" [src]="review.link_avatar">
+				<img *ngIf="!review.link_avatar" src="assets/images/person.png">
+			</ion-avatar>
+			<h2><b>{{review.user}}</b></h2>
+			<div>
+				<div class="rate"><div class="rating" [style.width]="review.rating*20+'%'"></div></div>
+				<span font-80>{{review.comment_date_gmt|date:'dd/MM/yyyy'}}</span>
+			</div>
+			<p [innerHTML]="review.comment_content"></p>
+		</ion-item>
+	</ion-list>
+</div>
+</ion-content>

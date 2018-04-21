@@ -1,0 +1,34 @@
+<ion-header (swipe)="onSwipeContent($event)">
+  <ion-navbar>
+	<ion-title>{{'categories.title'|translate}}</ion-title>
+	<ion-buttons end>
+		<button-cart #cart icon="icon-bag"></button-cart>
+	</ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+<!-- Empty -->
+<ion-row center *ngIf="parents.length < 1 && noResuilt" ion-fixed width-100 height-100 (swipe)="onSwipeContent($event)">
+	<ion-col width-50 style="margin:0 auto;" text-center>
+		<span>{{'categories.no_data'|translate}}</span>
+	</ion-col>
+</ion-row>
+<!-- Has categories -->
+<ion-row *ngIf="0 < parents.length" wrap padding-4>
+	<ion-col width-50 *ngFor="let category of parents" class="item-category"
+	[navPush]="DetailCategoryPage" [navParams]="{id:category.id}" padding-4>
+		<div relative size-full overflow (swipe)="onSwipeContent($event)">
+			<ion-row mark absolute top left width-100 height-100 center>
+				<ion-col text-center light>
+					<div class="name"><b [innerHtml]="category.name"></b></div>
+				</ion-col>
+			</ion-row>
+			<img float-left *ngIf="category.modernshop_images_categories && category.modernshop_images_categories.modern_square" [src]="category.modernshop_images_categories.modern_square" />
+			<img float-left *ngIf="!category.modernshop_images_categories || !category.modernshop_images_categories.modern_square" src="assets/images/no-image.png" />
+		</div>
+	</ion-col>
+</ion-row>
+</ion-content>
+
+<ion-footer (swipe)="onSwipeContent($event)"><ion-toolbar><footer-tabs></footer-tabs></ion-toolbar></ion-footer>

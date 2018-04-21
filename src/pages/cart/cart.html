@@ -1,0 +1,94 @@
+<ion-header>
+  <ion-navbar>
+	<ion-title>{{'cart.title'|translate}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content secondary-bg>
+<!-- Empty -->
+<ion-row center *ngIf="checkCart && (data|ObjectToArray).length < 1" ion-fixed width-100 height-100>
+	<ion-col width-50 style="margin:0 auto" text-center>
+		<h1><ion-icon name="icon-favorite"></ion-icon></h1>
+		<span>{{'cart.empty'|translate}}</span>
+		<button ion-button block (click)="shop()">{{'cart.shop'|translate}}</button>
+	</ion-col>
+</ion-row>
+<!-- Have product -->
+<div *ngIf="0 < (data|ObjectToArray).length">
+<!-- List product -->
+<ion-list padding light-bg class="list-product">
+  <ion-row *ngFor="let product of (data|ObjectToArray)" no-padding relative class="item-product">
+    <ion-col width-25 no-padding [navPush]="DetailPage" [navParams]="{id:product.id}">
+		<img *ngIf="product.images" [src]="product.images" />
+		<img *ngIf="!product.images" src="assets/images/no-image.png" />
+	</ion-col>
+	<ion-col no-padding margin-left>
+		<div dark margin-right [innerHTML]="product.name" [navPush]="DetailPage" [navParams]="{id:product.id}"></div>
+		<ion-row wrap padding-4-vertical>
+			<ion-col width-50 no-padding *ngFor="let attr of (product.attributes|ObjectToArray)">
+				<span>{{attr.name}}: </span><b text-capitalize>{{attr.option}}</b>
+			</ion-col>
+		</ion-row>
+		<ion-row class="product-quantity" wrap>
+			<ion-col no-padding>
+				<span *ngIf="product.sale_price" text-through>
+					{{product.regular_price|price}}
+				</span>
+				<b dark>{{product.price||0|price}}</b>
+			</ion-col>
+			<ion-col no-padding *ngIf="!product.sold_individually" class="btn-quantity">
+	<!-- 			<div> -->
+					<div float-left margin-2><span gray>{{'cart.qty'|translate}}</span></div>
+					<button-quantity [(ngModel)]="data[product.idCart].quantity" (update)="update()">
+					</button-quantity>
+		<!-- 		</div> -->
+			</ion-col>
+		</ion-row>
+	</ion-col>
+	<button ion-button clear color="gray" absolute no-margin class="button-delete disable-hover" (click)="delete(product.idCart)">
+		<ion-icon name="icon-trash"></ion-icon>
+	</button>
+  </ion-row>
+</ion-list>
+<!-- Coupon -->
+<ion-list class="cart-coupon">
+	<ion-item>
+		<ion-label color="dark" stacked>
+			<b>{{'cart.have_coupon'|translate}}</b>
+		</ion-label>
+		<ion-input placeholder="{{'cart.coupon_here'|translate}}" [(ngModel)]="couponCode">
+		</ion-input>
+		<button ion-button item-right text-uppercase [disabled]="!couponCode" (click)="apply()">
+			<span text-uppercase>{{'cart.apply'|translate}}</span>
+		</button>
+	</ion-item>
+</ion-list>
+<div padding margin-top light-bg dark class="totals">
+	<div margin-bottom><b dark text-uppercase>{{'cart.totals'|translate}}</b></div>
+	<ion-row>
+		<ion-col>{{'cart.total_price'|translate}}</ion-col>
+		<ion-col text-right>{{total()|price}}</ion-col>
+	</ion-row>
+	<ion-row>
+		<ion-col>{{'cart.tax'|translate}}</ion-col>
+		<ion-col text-right>{{tax|price}}</ion-col>
+	</ion-row>
+	 <ion-row *ngFor="let coupon of couponData; let i=index">
+		<ion-col width-66 class="detail-coupon">
+			<span float-left>{{'cart.coupon_code'|translate}}</span>
+			<span primary float-left margin-left> ({{coupon.code}})
+				<!-- <span *ngIf="coupon.value">: -{{((coupon.value*1)/total()*100)|number:'1.2-2'}}%</span>)  -->
+			</span>
+			<ion-icon gray tappable margin-left (click)="remove(i)" name="ios-close-circle-outline" float-left></ion-icon>
+		</ion-col>
+		<ion-col text-right primary *ngIf="coupon.value">-{{coupon.value|price}}</ion-col>
+	</ion-row> 
+	<button ion-button block icon-right margin-top (click)="gotoAddress()" [disabled]="invalid" class="button-checkout">
+		<span text-uppercase>{{'cart.checkout'|translate}}</span>
+		<ion-icon name="ios-arrow-round-forward"></ion-icon>
+	</button>
+</div>
+</div>
+</ion-content>
+
+<ion-footer><ion-toolbar><footer-tabs></footer-tabs></ion-toolbar></ion-footer>

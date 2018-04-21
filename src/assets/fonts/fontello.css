@@ -1,0 +1,13 @@
+@font-face {
+  font-family: "fontello";
+  src: url("fontello.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+ 
+.ion-ios-icon-iconcartcheck:before { content: '\e800'; } /* '' */
+.ion-md-icon-iconcartcheck:before { content: '\e800'; } /* '' */
+.ion-ios-icon-iconcartcheck-outline:before { content: '\e800'; } /* '' */
+.ion-ios-icon-iconcartadd:before { content: '\e801'; } /* '' */
+.ion-md-icon-iconcartadd:before { content: '\e801'; } /* '' */
+.ion-ios-icon-iconcartadd-outline:before { content: '\e801'; } /* '' */

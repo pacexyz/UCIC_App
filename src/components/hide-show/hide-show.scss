@@ -1,0 +1,16 @@
+hide-show {
+	display:block;
+	border-bottom:1px solid color($colors, secondary);
+	.button-change{
+		box-shadow:none;
+		.button-inner{
+			-webkit-justify-content: space-between;
+			-ms-flex-pack: space-between;
+			justify-content: space-between;
+		}
+	}
+	.hide-show-content{
+		overflow:auto;
+		background:color($colors, light);
+	}
+}

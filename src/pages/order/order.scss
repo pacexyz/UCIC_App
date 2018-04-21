@@ -1,0 +1,47 @@
+page-order {
+	.item-order{
+		border-bottom:1px solid #E4E2DF;
+		.order-id{margin-bottom:8px;}
+		.order-status{
+			background:#00A3FD;
+			min-width: 67px;
+			margin-left:5px;
+			padding:2px 5px;
+			padding-right:8px;
+			border-radius:25px;
+			display:inline-block;
+			position:relative;
+			&:before{
+				content:"\f282";
+				font-family:Ionicons;
+				color:#00A3FD;
+				position:absolute;
+				font-size:30px;
+				top:-6px;
+				left:-4px;
+			}
+		}
+		&.pending{
+			.order-status{
+				background:#FFB424;
+				&:before{color:#FFB322}
+			}
+		}
+		&.cancelled{
+			.order-status{
+				background:#B20000;
+				&:before{color:#B20000}
+			}
+		}
+		&.on-hold{
+			.order-status{
+				background:#9A9691;
+				&:before{color:#9A9691}
+			}
+		}
+		.detail{
+			right:0;
+		}
+	}
+	[border-dashed]{border-bottom:1px dashed #CBCBCA;}
+}

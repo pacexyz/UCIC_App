@@ -1,0 +1,18 @@
+<ion-row>
+	<ion-col text-center tappable (click)="goto(HomePage)" [ngClass]="{'selected':active==HomePage}">
+		<ion-icon name="icon-home"></ion-icon>
+		<div class="tab-name">{{'tabs.home'|translate}}</div>
+	</ion-col>
+	<ion-col text-center tappable (click)="goto(CategoriesPage)" [ngClass]="{'selected':active==CategoriesPage}">
+		<ion-icon name="locate"></ion-icon>
+		<div class="tab-name">{{'tabs.locate'|translate}}</div>
+	</ion-col>
+	<ion-col text-center tappable (click)="goto(SearchPage)" [ngClass]="{'selected':active==SearchPage}">
+		<ion-icon name="icon-search"></ion-icon>
+		<div class="tab-name">{{'tabs.search'|translate}}</div>
+	</ion-col>
+	<ion-col text-center tappable (click)="goto(AccountPage)" [ngClass]="{'selected':active==AccountPage}">
+		<ion-icon name="icon-account"></ion-icon>
+		<div class="tab-name">{{'tabs.account'|translate}}</div>
+	</ion-col>
+</ion-row>

@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-navbar>
+	<ion-title>{{'rating.title'|translate}}</ion-title>
+	<ion-buttons left>
+		<button ion-button clear (click)="dismiss()" class="back-button-md disable-hover button-close">
+			<ion-icon icon-big name="md-close"></ion-icon>
+		</button>
+	</ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+	<h6 dark>{{'rating.comment_about'|translate}}</h6>
+	<div margin-vertical class="rating-value">
+		{{'rating.your_rating'|translate}}
+		<a *ngFor="let value of [1,2,3,4,5]" (click)="ratingValue = value">
+			<ion-icon *ngIf="value <= ratingValue" name="icon-star"></ion-icon>
+			<ion-icon *ngIf="ratingValue < value || !ratingValue" name="icon-star-out"></ion-icon>
+		</a>
+	</div>
+	<ion-item mode="md" no-padding *ngIf="!login.token">
+		<ion-input placeholder="{{'rating.name'|translate}}" [(ngModel)]="name"></ion-input>
+	</ion-item>
+	<ion-item mode="md" no-padding *ngIf="!login.token">
+		<ion-input placeholder="{{'rating.email'|translate}}" [(ngModel)]="email"></ion-input>
+	</ion-item>
+	<ion-item mode="md" no-padding>
+		<ion-input placeholder="{{'rating.comment'|translate}}" [(ngModel)]="comment"></ion-input>
+	</ion-item>
+	<button ion-fixed bottom ion-button full (click)="rating()" no-margin [disabled]="!ratingValue || !comment">
+		<span text-uppercase>{{'rating.post'|translate}}</span>
+	</button>
+</ion-content>

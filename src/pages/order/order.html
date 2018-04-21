@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{'order.title'|translate}}</ion-title>
+	<ion-buttons end>
+		<button-cart #cart icon="icon-bag"></button-cart>
+	</ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+<!-- Refresh -->
+<ion-refresher (ionRefresh)="doRefresh($event)">
+	<ion-refresher-content
+		[pullingIcon]="'general.pullingIcon'|translate"
+		[pullingText]="'general.pullToRefresh'|translate"
+		[refreshingSpinner]="'general.refreshingSpinner'|translate"
+		[refreshingText]="'general.refreshing'|translate">
+	</ion-refresher-content>
+</ion-refresher>
+<!-- Empty -->
+<ion-row center *ngIf="noOrder" ion-fixed width-100 height-100>
+	<ion-col width-50 style="margin:0 auto" text-center>
+		<h1><ion-icon name="icon-list-4" icon-page></ion-icon></h1>
+		<span>{{'order.empty'|translate}}</span>
+		<button margin-vertical ion-button block (click)="shop()">{{'order.shop'|translate}}</button>
+	</ion-col>
+</ion-row>
+<!-- Has orders -->
+<ion-row *ngFor="let order of data" class="item-order" [ngClass]="order.status" padding relative>
+	<ion-col no-padding [navPush]="DetailOrderPage" [navParams]="{id:order.id}">
+		<div class="order-id">
+			<b dark>{{'order.id'|translate}} - #{{order.id}}</b>
+			<span class="order-status" *ngIf="order.status == 'processing'" light text-capitalize>{{'order.status.processing' |translate }}</span>
+			<span class="order-status" *ngIf="order.status == 'on-hold'" light text-capitalize>{{'order.status.on_hold' |translate }}</span>
+			<span class="order-status" *ngIf="order.status == 'cancelled'" light text-capitalize>{{'order.status.cancelled' |translate }}</span>
+			<span class="order-status" *ngIf="order.status == 'completed'" light text-capitalize>{{'order.status.completed' |translate }}</span>
+			<span class="order-status" *ngIf="order.status == 'pending'" light text-capitalize>{{'order.status.pending' |translate }}</span>
+			<span class="order-status" *ngIf="order.status == 'refunded'" light text-capitalize>{{'order.status.refunded' |translate }}</span>
+			<span class="order-status" *ngIf="order.status == 'failed'" light text-capitalize>{{'order.status.failed' |translate }}</span>
+		</div>
+		<div>{{'order.date'|translate}} {{order.date_created|date:date_format}}</div>
+		<div>
+			<span>{{'order.quantity'|translate}} {{order.line_items.length}}</span>
+			<span *ngIf="order.line_items.length <2">{{'order.item'|translate}}</span>
+			<span *ngIf="order.line_items.length >1">{{'order.items'|translate}}</span>
+		</div>
+		<div>{{'order.total'|translate}} <span [innerHTML]="order.total"></span></div>
+	</ion-col>
+	<button absolute bottom ion-button clear color="gray" [navPush]="DetailOrderPage" [navParams]="{id:order.id}" class="detail">
+		<span border-dashed>{{'order.details'|translate}}</span>
+	</button>
+</ion-row>
+<ion-infinite-scroll (ionInfinite)="load($event)" *ngIf="!over">
+	<ion-infinite-scroll-content></ion-infinite-scroll-content>
+</ion-infinite-scroll>
+</ion-content>

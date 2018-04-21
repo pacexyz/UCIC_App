@@ -1,17 +1,39 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>
-      Contact
-    </ion-title>
+    <ion-title>{{'contact.title'|translate}}</ion-title>
+	<ion-buttons end>
+		<button ion-button clear (click)="gotoAbout()" class="disable-hover">
+			<span text-capitalize>{{'contact.about'|translate}}</span>
+		</button>
+	</ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-list-header>Follow us on Twitter</ion-list-header>
-    <ion-item>
-      <ion-icon name="ionic" item-start></ion-icon>
-      @ionicframework
-    </ion-item>
-  </ion-list>
+	<div padding>
+		<h5><b dark text-uppercase>{{'contact.send_a_message'|translate}}</b></h5>
+		<ion-list class="contact-form">
+		  <form [formGroup]="formContact">
+			<ion-item mode="md" no-padding>
+				<ion-input placeholder="{{'contact.name'|translate}}" formControlName="name"></ion-input>
+			</ion-item>
+			<ion-item mode="md" no-padding>
+				<ion-input type="email" placeholder="{{'contact.email'|translate}}" formControlName="email"></ion-input>
+			</ion-item>
+			<ion-item mode="md" no-padding>
+				<ion-input placeholder="{{'contact.subject'|translate}}" formControlName="subject"></ion-input>
+			</ion-item>
+			<ion-item mode="md" no-padding>
+				<ion-textarea placeholder="{{'contact.message'|translate}}" formControlName="message"></ion-textarea>
+			</ion-item>
+			<div margin-top overflow>
+				<ion-spinner *ngIf="isSend" name="ios" float-left></ion-spinner>
+				<button ion-button float-right [disabled]="formContact.invalid" (click)="send()">{{'contact.send'|translate}}</button>
+			</div>
+		  </form>
+		</ion-list>
+	</div>
+	<about-footer></about-footer>
 </ion-content>
+
+<ion-footer><ion-toolbar><footer-tabs></footer-tabs></ion-toolbar></ion-footer>

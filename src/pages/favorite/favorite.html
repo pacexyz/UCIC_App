@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{'favorite.title'|translate}}</ion-title>
+	<ion-buttons end *ngIf="data && 0 < (data|ObjectToArray).length">
+		<button ion-button clear (click)="clear()" color="primary" class="disable-hover">{{'favorite.clear.title'|translate}}</button>
+	</ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+<ion-row padding-8 wrap *ngIf="data && 0 < (data|ObjectToArray).length">
+	<ion-col padding-8 width-50 *ngFor="let product of (data|ObjectToArray)">
+		<div relative float-left>
+			<img [navPush]="DetailPage" [navParams]="{id:product.id}" float-left *ngIf="product.images" [src]="product.images" />
+			<img [navPush]="DetailPage" [navParams]="{id:product.id}" float-left *ngIf="!product.images" src="assets/images/no-image.png" />
+			<button ion-button clear class="disable-hover delete-favorite" absolute top (click)="delete(product.id)" color="gray">
+				<ion-icon name="icon-trash"></ion-icon>
+			</button>
+			<img absolute icon-sale *ngIf="(product.type=='variable'||product.type=='grouped') && product.on_sale" src="assets/images/icon-sale.png" />
+		</div>
+		<div [navPush]="DetailPage" [navParams]="{id:product.id}">
+			<p float-left width-100>
+				<span *ngIf="product.type!='variable' && product.type!='grouped'" font-90>
+					<b dark font-120>{{product.price*1||0|price}}</b>
+					<span *ngIf="product.sale_price" margin-left text-through>{{product.regular_price*1|price}}</span>
+				</span>
+				<span *ngIf="product.type=='variable' || product.type=='grouped'" font-90>
+					<b dark font-120 [innerHTML]="product.price_html"></b>
+				</span>
+			</p>
+			<span float-left width-100 [innerHTML]="product.name"></span>
+		</div>
+	</ion-col>
+</ion-row>
+<ion-row center *ngIf="!data || (data|ObjectToArray).length < 1" ion-fixed width-100 height-100>
+	<ion-col width-50 style="margin:0 auto" text-center>
+		<h1><ion-icon name="icon-favorite"></ion-icon></h1>
+		<span>{{'favorite.empty'|translate}}</span>
+		<button ion-button block (click)="shop()">{{'favorite.shop'|translate}}</button>
+	</ion-col>
+</ion-row>
+</ion-content>
+
+<ion-footer><ion-toolbar><footer-tabs></footer-tabs></ion-toolbar></ion-footer>

@@ -1,0 +1,27 @@
+page-categories {
+	.scroll-header{
+		height:5.6rem;
+		white-space:nowrap;
+		.button{
+			height:5.6rem;
+			&.active{
+				color:color($colors, primary);
+				border-bottom:3px solid color($colors, primary);
+			}
+		}
+	}
+	.item-category{
+		.row {
+			display: flex;
+			align-items: center;
+		}
+
+		[mark]{@include background-opacity(#000, 0.4);}
+		.name{
+			display:inline-block;
+			padding:5px 10px;
+			border:1px solid;
+			border-radius:2px;
+		}
+	}
+}

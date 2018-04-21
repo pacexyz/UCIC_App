@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{'latest.title'|translate}}</ion-title>
+	<ion-buttons end>
+		<button-cart #cart icon="icon-bag"></button-cart>
+	</ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+<!-- Refresh -->
+<ion-refresher (ionRefresh)="doRefresh($event)">
+	<ion-refresher-content
+		[pullingIcon]="'general.pullingIcon'|translate"
+		[pullingText]="'general.pullToRefresh'|translate"
+		[refreshingSpinner]="'general.refreshingSpinner'|translate"
+		[refreshingText]="'general.refreshing'|translate">
+	</ion-refresher-content>
+</ion-refresher>
+<!-- List products -->
+<ion-row padding-8 wrap *ngIf="products && 0<products.length">
+	<ion-col padding-8 width-50 *ngFor="let product of products" [navPush]="DetailPage" [navParams]="{id:product.id}">
+		<div relative float-left product-border>
+			<img float-left *ngIf="product.modernshop_images[0].modern_square" [src]="product.modernshop_images[0].modern_square" />
+			<img float-left *ngIf="!product.modernshop_images[0].modern_square" src="assets/images/no-image.png" />
+			<div absolute bottom primary-bg product-sale *ngIf="product.sale_price && product.type!='variable' && product.type!='grouped'">
+				<span light>{{(product.sale_price/product.regular_price*100)-100|number:'1.0-0'}}%</span>
+			</div>
+			<img absolute icon-sale *ngIf="(product.type=='variable'||product.type=='grouped') && product.on_sale" src="assets/images/icon-sale.png" />
+			<img absolute icon-outstock *ngIf="!product.in_stock" src="assets/images/outstock.png" />
+		</div>
+		<p float-left width-100>
+			<span *ngIf="product.type!='variable' && product.type!='grouped'" font-90>
+				<b dark font-120>{{product.price*1||0|price}}</b>
+				<span *ngIf="product.sale_price" margin-left text-through>{{product.regular_price*1|price}}</span>
+			</span>
+			<span *ngIf="product.type=='variable' || product.type=='grouped'" font-90>
+				<b dark font-120 [innerHTML]="product.price_html"></b>
+			</span>
+		</p>
+		<span [innerHTML]="product.name"></span>
+	</ion-col>
+</ion-row>
+<div padding *ngIf="products.length <1 && noresuilt" text-center>{{'general.no_data'|translate}}</div>
+<ion-infinite-scroll (ionInfinite)="load($event)" *ngIf="!over">
+	<ion-infinite-scroll-content></ion-infinite-scroll-content>
+</ion-infinite-scroll>
+</ion-content>
+
+<ion-footer><ion-toolbar><footer-tabs></footer-tabs></ion-toolbar></ion-footer>

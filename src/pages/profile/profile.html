@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{'profile.title'|translate}}</ion-title>
+	<ion-buttons end>
+		<button ion-button clear class="disable-hover" color="primary" (click)="save()">
+			<span>{{'profile.done'|translate}}</span>
+		</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+<div *ngIf="data">
+	<div class="profile-avatar" margin-auto>
+		<img *ngIf="avatar" [src]="avatar" width-100 height-100>
+		<img *ngIf="!avatar" src="assets/images/person.png">
+	</div>
+	<button ion-button clear icon-left color="dark" margin-auto (click)="editAvatar()" class="disable-hover">
+		<ion-icon name="icon-pen"></ion-icon>
+		<b>{{'profile.edit'|translate}}</b>
+	</button>
+	<ion-list class="edit-form" no-margin padding>
+		<form [formGroup]="formEdit">
+			<ion-item mode="md" bg-transparent no-padding>
+				<ion-label floating>{{'general.first_name'|translate}}</ion-label>
+				<ion-input dark type="text" formControlName="first_name">
+				</ion-input>
+			</ion-item>
+			<ion-item mode="md" bg-transparent no-padding>
+				<ion-label floating>{{'general.last_name'|translate}}</ion-label>
+				<ion-input dark type="text" formControlName="last_name">
+				</ion-input>
+			</ion-item>
+			<ion-item mode="md" bg-transparent no-padding>
+				<ion-label floating>{{'general.email'|translate}}</ion-label>
+				<ion-input dark type="email" formControlName="user_email">
+				</ion-input>
+			</ion-item>
+			<ion-item mode="md" bg-transparent no-padding>
+				<ion-label floating>{{'profile.new_password'|translate}}</ion-label>
+				<ion-input dark type="text" formControlName="user_pass">
+				</ion-input>
+			</ion-item>
+		</form>
+	</ion-list>
+</div>
+</ion-content>
+
+<ion-footer><ion-toolbar><footer-tabs></footer-tabs></ion-toolbar></ion-footer>

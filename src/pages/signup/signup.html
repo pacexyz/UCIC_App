@@ -1,0 +1,44 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>{{'signup.title'|translate}}</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding-horizontal>
+<div padding-horizontal>
+	<ion-list class="login-form">
+	  <form [formGroup]="formSignup">
+		<ion-item mode="md" bg-transparent no-padding>
+			<ion-label floating><span light>{{'general.first_name'|translate}}</span></ion-label>
+			<ion-input light formControlName="first_name"></ion-input>
+		</ion-item>
+		<ion-item mode="md" bg-transparent no-padding>
+			<ion-label floating><span light>{{'general.last_name'|translate}}</span></ion-label>
+			<ion-input light formControlName="last_name"></ion-input>
+		</ion-item>
+		<ion-item mode="md" bg-transparent no-padding>
+			<ion-label floating><span light>{{'general.username'|translate}}</span></ion-label>
+			<ion-input light formControlName="username"></ion-input>
+		</ion-item>
+		<ion-item mode="md" bg-transparent no-padding>
+			<ion-label floating><span light>{{'general.email'|translate}}</span></ion-label>
+			<ion-input light type="email" formControlName="email"></ion-input>
+		</ion-item>
+		<ion-item mode="md" bg-transparent no-padding>
+			<ion-label floating><span light>{{'general.password'|translate}}</span></ion-label>
+			<ion-input light type="password" formControlName="password" (input)="removeConfirm()"></ion-input>
+		</ion-item>
+		<ion-item mode="md" bg-transparent no-padding>
+			<ion-label floating><span light>{{'signup.confirm_password'|translate}}</span></ion-label>
+			<ion-input light type="password" formControlName="repass"></ion-input>
+		</ion-item>
+	  </form>
+	</ion-list>
+	<button ion-button block text-uppercase (click)="register()" [disabled]="formSignup.invalid">
+		<span>{{'signup.title'|translate}}</span>
+	</button>
+	<button ion-button block clear class="disable-hover" color="light" (click)="gotoLogin()">
+		<span>{{'signup.login'|translate}}</span>
+	</button>
+</div>
+</ion-content>

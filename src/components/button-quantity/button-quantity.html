@@ -1,0 +1,12 @@
+<ion-row class="button-quantity-inner" wrap center>
+	<!--
+	<button no-margin ion-button clear [disabled]="innerValue<=min" (click)="minus()" class="disable-hover">-</button>
+	<input text-center class="value" #input no-margin [(ngModel)]="value" type="number" (blur)="inputBlur(true)" />
+	<button no-margin ion-button clear (click)="plus()" [disabled]="max<=innerValue" class="disable-hover">+</button>
+-->
+	<select text-center class="value" #input no-margin [(ngModel)]="value" (blur)="inputBlur(true)">
+		<option value=300>300</option>
+		<option value=400>400</option>
+	</select>
+
+</ion-row>

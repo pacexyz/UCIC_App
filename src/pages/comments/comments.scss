@@ -1,0 +1,25 @@
+page-comments {
+	.comments-statis{
+		.icon{font-size:85%}
+		.percent{
+			display:inline-block;
+			height:17px;
+			padding:4px 0 4px 30px;
+			.percent-background{
+				background:#f0f0f0;
+				height:100%;
+				.percent-value{
+					background:#37be5f;
+					&.rating1{background:#ff6d13}
+					&.rating2{background:#ffb500}
+				}
+			}
+		}
+	}
+	.comments-review{
+		.item{
+			display:block;
+			.label{margin:6px 8px 6px 0}
+		}
+	}
+}

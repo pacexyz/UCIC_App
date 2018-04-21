@@ -1,3 +1,10 @@
 page-contact {
-
+	.contact-form{
+		.item{
+			&.input-has-focus{
+				.item-inner{border-bottom-color:#dedede}
+			}
+		}
+		.button{width:50%}
+	}
 }

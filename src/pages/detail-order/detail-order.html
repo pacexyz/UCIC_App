@@ -1,0 +1,178 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title *ngIf="data">{{'detailOrder.title'|translate}}{{data.id}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content secondary-bg>
+<!-- Refresh -->
+<ion-refresher (ionRefresh)="doRefresh($event)">
+	<ion-refresher-content
+		[pullingIcon]="'general.pullingIcon'|translate"
+		[pullingText]="'general.pullToRefresh'|translate"
+		[refreshingSpinner]="'general.refreshingSpinner'|translate"
+		[refreshingText]="'general.refreshing'|translate">
+	</ion-refresher-content>
+</ion-refresher>
+<!-- Status -->
+<div padding relative *ngIf="data" class="order-status" [ngClass]="data.status">
+	<span light>{{'detailOrder.order_status'|translate}}
+		<!-- <span text-capitalize>{{data.status}}</span> -->
+		<span *ngIf="data.status == 'processing'"  text-capitalize>{{'order.status.processing' |translate }}</span>
+		<span *ngIf="data.status == 'on-hold'"  text-capitalize>{{'order.status.on_hold' |translate }}</span>
+		<span  *ngIf="data.status == 'cancelled'"  text-capitalize>{{'order.status.cancelled' |translate }}</span>
+		<span *ngIf="data.status == 'completed'"  text-capitalize>{{'order.status.completed' |translate }}</span>
+		<span *ngIf="data.status == 'pending'"  text-capitalize>{{'order.status.pending' |translate }}</span>
+		<span *ngIf="data.status == 'refunded'"  text-capitalize>{{'order.status.refunded' |translate }}</span>
+		<span *ngIf="data.status == 'failed'"  text-capitalize>{{'order.status.failed' |translate }}</span>
+	</span>
+	<div absolute top right height-100 class="order-date" text-nowrap>{{data.date_created|date:date_format}}</div>
+</div>
+<!-- Address -->
+<ion-list class="address" *ngIf="data && data.shipping">
+	<ion-item-divider color="light">
+		<ion-icon name="icon-location" item-left></ion-icon>
+		<ion-label><b dark>{{'detailOrder.address'|translate}}</b></ion-label>
+	</ion-item-divider>
+	<hide-show color="light" show="true" no-border>
+		<span this-title><b>{{'detailOrder.delivery_address'|translate}}</b></span>
+		<div this-content>
+			<p><b>{{data.shipping.first_name}} {{data.shipping.last_name}}</b></p>
+			<p>{{data.shipping.company}}</p>
+			<p>{{data.shipping.address_1}} {{data.shipping.address_2}}</p>
+			<p>{{data.shipping.city}}</p>
+			<p>{{data.shipping.country}}</p>
+			<p>{{data.billing.phone}}</p>
+			<p>{{data.shipping.postcode}}</p>
+		</div>
+	</hide-show> 
+	<hide-show color="light" show="true" no-border>
+		<span this-title><b>{{'detailOrder.billing_address'|translate}}</b></span>
+		<div this-content>
+			<p><b>{{data.billing.first_name}} {{data.billing.last_name}}</b></p>
+			<p>{{data.billing.company}}</p>
+			<p>{{data.billing.address_1}} {{data.billing.address_2}}</p>
+			<p>{{data.billing.city}}</p>
+			<p>{{data.billing.country}}</p>
+			<p>{{data.billing.phone}}</p>
+			<p>{{data.billing.postcode}}</p>
+		</div>
+	</hide-show> 
+</ion-list>
+<!-- Shipping method -->
+<ion-list *ngIf="data && data.shipping_lines && 0<data.shipping_lines.length">
+	<hide-show color="light" show="true" no-border>
+		<span this-title>
+			<ion-icon name="icon-time" icon-big></ion-icon>
+			<b dark>{{'detailOrder.shipping_method'|translate}}</b>
+		</span>
+		<div this-content>
+			<ion-item mode="md" *ngFor="let item of data.shipping_lines" no-padding>
+					<ion-label>
+						<span dark>{{item.method_title}}: </span>
+						<span primary *ngIf="item.total"><span [innerHTML]="item.total"></span></span>
+						<span primary *ngIf="item.total==0" success>{{'detailOrder.free'|translate}}</span>
+					</ion-label>
+			</ion-item>
+		</div>
+	</hide-show> 
+</ion-list>
+<!-- Payment method -->
+<ion-list *ngIf="data && data.payment_method_title">
+	<hide-show color="light" show="true" no-border>
+		<span this-title>
+			<ion-icon name="icon-wallet" icon-big></ion-icon>
+			<b dark>{{'detailOrder.payment_method'|translate}}</b>
+		</span>
+		<div this-content>
+			<ion-item mode="md" no-padding>
+				<ion-label><span dark>{{data.payment_method_title}}</span></ion-label>
+			</ion-item>
+		</div>
+	</hide-show> 
+</ion-list>
+<!-- Payment info -->
+<ion-list *ngIf="data && data.payment_method_title">
+	<hide-show color="light" show="true" no-border>
+		<span this-title>
+			<ion-icon name="ios-card" icon-big></ion-icon>
+			<b dark>{{'detailOrder.title_card'|translate}}</b>
+		</span>
+		<div this-content>
+			<div *ngFor="let detail of data.bacs_accounts">
+				<ion-item mode="md" no-padding>
+					<ion-label><span dark>{{'detailOrder.name'|translate}}</span><b float-right>{{detail.account_name}}</b></ion-label>
+				</ion-item>
+				<ion-item mode="md" no-padding>
+					<ion-label><span dark>{{'detailOrder.cartnumber'|translate}}</span><b float-right>{{detail.account_number}}</b></ion-label>
+				</ion-item>
+				<ion-item mode="md" no-padding>
+					<ion-label><span dark>{{'detailOrder.bankname'|translate}}</span><b float-right>{{detail.bank_name}}</b></ion-label>
+				</ion-item>
+			</div>
+		</div>
+	</hide-show> 
+</ion-list>
+<!-- Order detail -->
+<ion-list *ngIf="data && data.line_items && 0<data.line_items.length">
+	<hide-show color="light" show="true" no-border>
+		<span this-title width-100 margin-right>
+			<ion-icon name="icon-list-4" icon-big float-left></ion-icon>
+			<b dark float-left>{{'detailOrder.order_detail'|translate}}</b>
+			<span float-right>{{data.line_items.length}} {{'detailOrder.items'|translate}}</span>
+		</span>
+		<div this-content>
+			<!-- List product -->
+			<ion-list light-bg class="list-product" padding-vertical no-margin>
+			  <ion-row *ngFor="let product of data.line_items" no-padding relative class="item-product">
+				<ion-col width-25 no-padding [navPush]="DetailPage" [navParams]="{id:product.product_id}">
+					<img *ngIf="product.images.wooconnector_medium" [src]="product.images.wooconnector_medium">
+					<img *ngIf="!product.images.wooconnector_medium" src="assets/images/no-image.png">
+				</ion-col>
+				<ion-col no-padding margin-horizontal [navPush]="DetailPage" [navParams]="{id:product.id}">
+					<span dark [innerHTML]="product.name"></span>
+					<ion-row wrap padding-4-vertical>
+						<ion-col width-50 no-padding *ngFor="let attr of product.meta">
+							<span>{{attr.label}}: </span><b text-capitalize>{{attr.value}}</b>
+						</ion-col>
+					</ion-row>
+					<ion-row class="product-quantity" wrap>
+						<ion-col no-padding>
+							<b dark><span [innerHTML]="product.sale_price"></span> x{{product.quantity}}</b>
+						</ion-col>
+					</ion-row>
+				</ion-col>
+			  </ion-row>
+			</ion-list>
+			<div light-bg dark class="totals" *ngIf="data" padding-bottom>
+				<div margin-bottom><b dark text-uppercase>{{'detailOrder.totals'|translate}}</b></div>
+				<ion-row>
+					<ion-col>{{'detailOrder.total_price'|translate}}</ion-col>
+					<ion-col text-right [innerHTML]="data.subtotal"></ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col>{{'detailOrder.shipping'|translate}}</ion-col>
+					<ion-col text-right *ngIf="data.shipping_total" [innerHTML]="data.shipping_total"></ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col>{{'detailOrder.tax'|translate}}</ion-col>
+					<ion-col text-right [innerHTML]="data.total_tax"></ion-col>
+				</ion-row>
+				<ion-row *ngFor="let coupon of data.coupon_lines">
+					<ion-col>{{'detailOrder.coupon_code'|translate}} <span gray>({{coupon.code}})</span></ion-col>
+					<ion-col text-right [innerHTML]="'-'+coupon.discount"></ion-col>
+				</ion-row>
+				<ion-row>
+					<ion-col><b dark>{{'detailOrder.order_total'|translate}}</b></ion-col>
+					<ion-col text-right><b dark [innerHTML]="data.total"></b></ion-col>
+				</ion-row>
+			</div>
+		</div>
+	</hide-show> 
+</ion-list>
+<div padding *ngIf="data && (data.status=='on-hold' || data.status=='pending')" overflow>
+	<button ion-button block (click)="changeStatus()" no-margin class="button-cancel">
+		<span>{{'detailOrder.cancel_order'|translate}}</span>
+	</button>
+</div>
+</ion-content>

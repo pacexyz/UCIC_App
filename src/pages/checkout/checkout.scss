@@ -1,0 +1,78 @@
+page-checkout {
+	.item-divider .item-inner{margin:0;}
+	.address{
+		hide-show .hide-show-content{border-top:none;}
+	}
+	hide-show{
+		.button-change{
+			height:50px;
+			[this-title]{
+				line-height:28px;
+				.icon{
+					float:left;
+					margin-right:8px;
+				}
+			}
+		}
+		.hide-show-content{border-top:$item-md-divider-border-bottom;}
+	}
+	.list-shipping{
+		.item{
+			.item-inner{padding:0;}
+			.radio{
+				.item-cover{display:none}
+			}
+		}
+	}
+
+	.checkout-term {
+		margin-bottom: 15px;
+		
+		.check-allow{
+			padding: 0;
+			position: absolute;
+		}
+
+		.term-note {
+			padding-left: 28px;
+		}
+	}
+	
+	.list-product{
+		.item-product{
+			border-bottom:1px solid color($colors, secondary);
+			padding-bottom:4px;
+			margin-bottom:5px;
+			.product-quantity{
+				>ion-col:first-child{padding-right:5px}
+			}
+			&:last-child{
+				border-bottom:none;
+				padding-bottom:0;
+				margin-bottom:0;
+			}
+		}
+	}
+	.totals{
+		ion-row{
+			ion-col{
+				&:first-child{padding-left:0}
+			}
+		}
+	}
+	.list-payment{
+		.item{
+			.item-inner{
+				border-bottom:none;
+				padding:0;
+				padding-left:36px;
+				.radio{
+					position:absolute;
+					margin:10px 0;
+					top:0;
+					left:0;
+				}
+			}
+		}
+	}
+}

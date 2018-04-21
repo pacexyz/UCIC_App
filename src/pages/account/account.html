@@ -1,0 +1,87 @@
+<ion-content>
+	<div relative overflow class="account-header" text-center (swipe)="onSwipeContent($event)">
+		<img float-left width-100 src="assets/images/account-bg.png" />
+		<div mark absolute top left width-100 height-100></div>
+		<ion-row center padding absolute top left width-100 height-100>
+			<ion-col secondary>
+				<button absolute ion-button color="light" clear navPop class="button-back">
+					<ion-icon icon-big name="md-arrow-back"></ion-icon>
+				</button>
+				<div *ngIf="!isLogin">
+					<div class="account-avatar" margin-auto>
+						<ion-icon name="icon-account"></ion-icon>
+					</div>
+					<button ion-button color="light" clear [navPush]="LoginPage" class="disable-hover">
+						<b>{{'account.login'|translate}}</b>
+					</button>
+				</div>
+				<div *ngIf="isLogin">
+					<div class="account-avatar" margin-auto>
+						<ion-icon *ngIf="!data.user.mobiconnector_avatar" name="icon-account"></ion-icon>
+						<img *ngIf="data.user.mobiconnector_avatar" [src]="data.user.mobiconnector_avatar" [navPush]="ProfilePage" width-100 height-100 />
+					</div>
+					<button absolute ion-button color="light" clear (click)="signOut()" class="disable-hover button-signout">
+						<ion-icon icon-big name="icon-logout"></ion-icon>
+					</button>
+					<h4 no-margin [navPush]="ProfilePage">
+						<b light>{{data.user.display_name}}</b>
+						<ion-icon font-80 name="icon-pen"></ion-icon>
+					</h4>
+					<h5 no-margin>{{data.user.user_email}}</h5>
+				</div>
+			</ion-col>
+		</ion-row>
+	</div>
+	<ion-list no-margin class="account-list" *ngIf="data.text" (swipe)="onSwipeContent($event)">
+		<button ion-item detail-none color="light" [navPush]="isLogin?OrderPage:LoginPage">
+			<ion-icon name="icon-list-4" item-left></ion-icon>
+			<ion-label>{{'account.my_order'|translate}}</ion-label>
+			<ion-spinner item-right *ngIf="isLogin && !loadedOrder"></ion-spinner>
+			<ion-note item-right *ngIf="loadedOrder || !isLogin">{{data.order||0}}</ion-note>
+		</button>
+		<button ion-item detail-none color="light" [navPush]="FavoritePage">
+			<ion-icon name="icon-favorite" item-left></ion-icon>
+			<ion-label>{{'account.favorite'|translate}}</ion-label>
+			<ion-note item-right>{{data.favorite||0}}</ion-note>
+		</button>
+		<ion-item color="light" detail-none>
+			<ion-icon name="icon-notification" item-left></ion-icon>
+			<ion-label>{{'account.push_notification'|translate}}</ion-label>
+			<ion-toggle mode="md" item-right [(ngModel)]="data.notification" (ngModelChange)="notification()"></ion-toggle>
+		</ion-item>
+		<button ion-item detail-none color="light" (click)="changeTextSize()">
+			<ion-icon name="icon-font" item-left></ion-icon>
+			<ion-label>{{'account.text_size.title'|translate}}</ion-label>
+			<ion-note item-right text-capitalize>{{'account.text_size.option.'+data.text|translate}}</ion-note>
+		</button>
+		<button ion-item detail-none color="light" (click)="shareApp()">
+			<ion-icon name="icon-send" item-left></ion-icon>
+			<ion-label>{{'account.app_share'|translate}}</ion-label>
+		</button>
+		<button ion-item detail-none color="light" (click)="rateApp()">
+			<ion-icon name="icon-star-out" item-left></ion-icon>
+			<ion-label>{{'account.rate_us'|translate}}</ion-label>
+		</button>
+		<button ion-item detail-none color="light" [navPush]="TermsPage">
+			<ion-icon name="icon-list" item-left></ion-icon>
+			<ion-label>{{'account.terms_of_use'|translate}}</ion-label>
+		</button>
+		<button ion-item detail-none color="light" [navPush]="PrivacyPage">
+			<ion-icon name="icon-list-lock" item-left></ion-icon>
+			<ion-label>{{'account.privacy_policy'|translate}}</ion-label>
+		</button>
+		<button ion-item detail-none color="light" [navPush]="ContactPage">
+			<ion-icon name="icon-location" item-left></ion-icon>
+			<ion-label>{{'account.contact_us'|translate}}</ion-label>
+		</button>
+		<button ion-item detail-none color="light" [navPush]="AboutPage">
+			<ion-icon name="icon-info" item-left></ion-icon>
+			<ion-label>{{'account.about_us'|translate}}</ion-label>
+		</button>
+		<ion-item mode="md">
+			<ion-label text-center>{{'account.version'|translate}}</ion-label>
+		</ion-item>
+	</ion-list>
+</ion-content>
+
+<ion-footer (swipe)="onSwipeContent($event)"><ion-toolbar><footer-tabs></footer-tabs></ion-toolbar></ion-footer>

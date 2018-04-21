@@ -1,0 +1,26 @@
+<ion-header text-center>
+  <ion-navbar hideBackButton="true" text-center>
+    <ion-title>
+		<ion-icon name="icon-check" light></ion-icon>
+		<span light> {{'thanks.title'|translate}}</span>
+	</ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-title>
+		<div light><b [innerHTML]="'modern_order_success_thanks'|static"></b></div>
+		<div light margin-bottom>{{'thanks.yourID'|translate}}{{id}}</div>
+	</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+	<ion-row center ion-fixed width-100 *ngIf="isLogin">
+		<ion-col width-50 text-center class="text-order">
+			<h1><ion-icon name="icon-list-4"></ion-icon></h1>
+			<p [innerHTML]="'modern_canreview_order_title'|static"></p>
+			<button ion-button block [navPush]="OrderPage">{{'thanks.myOrder'|translate}}</button>
+		</ion-col>
+	</ion-row>
+</ion-content>
+
+<ion-footer><ion-toolbar><footer-tabs></footer-tabs></ion-toolbar></ion-footer>

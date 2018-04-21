@@ -1,0 +1,31 @@
+page-login {
+	.header{
+		.toolbar{
+			.toolbar-background{
+				background:none;
+				border:none;
+			}
+			.back-button, .toolbar-title{color:color($colors, light, base);}
+		}
+		&:after{display:none}
+	}
+	.content{
+		background:url(../assets/images/login-bg.png);
+		background-size:100% auto;
+		.login-form{
+			.item{
+				.icon{
+					-webkit-align-self:flex-end;
+					-ms-flex-item-align:flex-end;
+					align-self:flex-end;
+					font-size:20px;
+					line-height:28px;
+					margin:0;
+				}
+				.wrong-password{
+					span{line-height:18px}
+				}
+			}
+		}
+	}
+}

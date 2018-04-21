@@ -1,0 +1,40 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>{{'login.title'|translate}}</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content padding>
+<ion-row center ion-fixed width-100 height-100 padding>
+<ion-col padding>
+	<ion-list class="login-form" no-margin>
+		<form [formGroup]="formLogin">
+			<ion-item mode="md" bg-transparent no-padding>
+				<ion-label floating><span light>{{'general.username'|translate}}</span></ion-label>
+				<ion-input light formControlName="username"></ion-input>
+			</ion-item>
+			<ion-item mode="md" bg-transparent no-padding>
+				<ion-label floating [attr.font-80]="wrong?true:null" [ngClass]="wrong?'wrong-password':''">
+					<span light *ngIf="!wrong">{{'general.password'|translate}}</span>
+					<span danger *ngIf="wrong">{{'login.wrong'|translate}}</span>
+				</ion-label>
+				<ion-input light type="password" formControlName="password" (focus)="wrong=false"></ion-input>
+				<ion-icon *ngIf="wrong" color="danger" item-right name="icon-info-circle"></ion-icon>
+			</ion-item>
+		</form>
+	</ion-list>
+	<div overflow margin-bottom>
+		<button ion-button float-right clear class="disable-hover" color="secondary" (click)="forgot()">
+			<span>{{'login.forgot_password'|translate}}</span>
+		</button>
+	</div>
+	<button ion-button block text-uppercase (click)="login()" [disabled]="formLogin.invalid">
+		<span>{{'login.title'|translate}}</span>
+	</button>
+	<div light margin-top text-center>
+		<span>{{'login.signupText'|translate}}</span>
+		<span [navPush]="SignupPage">{{'login.signup'|translate}}</span>
+	</div>
+</ion-col>
+</ion-row>
+</ion-content>

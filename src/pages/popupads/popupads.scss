@@ -1,0 +1,27 @@
+page-popupads {
+	.disable-hover{
+		padding:0;
+		border: 1px solid #dedede;
+		border-radius:50%;
+		width:30px;
+		height:30px;
+		background: #fff;
+		color: #7d7a76;
+		.icon-closepopup{
+			font-size: 2.2em;
+		}
+	}
+	.popup-content{
+		.popup-body{
+			img{
+				padding: 10px;
+    			border-radius: 20px;
+			}
+		}
+		.fixed-content, .scroll-content {
+			margin-top: 0px !important;
+		}
+		background: transparent;
+		/*margin-top:48px;*/
+	}
+}
