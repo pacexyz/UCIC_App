@@ -112,7 +112,7 @@
     <plugin name="cordova-plugin-x-toast" spec="~2.6.2" />
     <plugin name="cordova.plugins.diagnostic" spec="~4.0.4" />
     <plugin name="onesignal-cordova-plugin" spec="~2.3.3" />
-    <plugin name="Cordova-sqlite-evcore-extbuild-free" spec="~2.3.0" />
+    <plugin name="Cordova-sqlite-evcore-extbuild-free" />
     <plugin name="cordova-plugin-screen-orientation" spec="~3.0.1" />
     <plugin name="cordova-plugin-device" spec="~2.0.1" />
     <engine name="ios" spec="4.5.3" />
