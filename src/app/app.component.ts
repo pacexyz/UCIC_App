@@ -10,7 +10,6 @@ import { TranslateService } from '../module/ng2-translate';
 import { Storage } from '@ionic/storage';
 import { Config } from '../service/config.service';
 import { Network } from '@ionic-native/network';
-import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeInterstitialConfig } from '@ionic-native/admob-free';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { Device } from '@ionic-native/device';
@@ -22,14 +21,10 @@ import { LoginPage } from '../pages/login/login';
 declare var wordpress_url: string;
 declare var application_language: string;
 declare var google_analytics: string;
-declare var admob_android_banner: string;
-declare var admob_android_interstitial: string;
-declare var admob_ios_banner: string;
-declare var admob_ios_interstitial: string;
 
 @Component({
 	templateUrl: 'app.html',
-	providers: [Core, AdMobFree, GoogleAnalytics, ScreenOrientation, Device]
+	providers: [Core, GoogleAnalytics, ScreenOrientation, Device]
 })
 export class MyApp {
 	HomePage = HomePage;
@@ -52,7 +47,6 @@ export class MyApp {
 		Network: Network,
 		screenOrientation: ScreenOrientation,
 		ga: GoogleAnalytics,
-		admobFree : AdMobFree,
 		private device: Device
 	) {
 		translate.setDefaultLang(application_language);
@@ -122,41 +116,13 @@ export class MyApp {
 			if (platform.is('cordova')) {
 			 	screenOrientation.lock('portrait');
 			 	let operating_system = '';
-				let admob: Object = {};
 				if (device.platform == 'Android') {
 					operating_system = 'Android';
-					admob = {
-						banner: admob_android_banner,
-						interstitial: admob_android_interstitial
-					};
+
 				} else if (device.platform == 'iOS') {
 					operating_system = 'iOS';
-					admob = {
-						banner: admob_ios_banner,
-						interstitial: admob_ios_interstitial
-					};
-				}
-				if(admob['banner']) {
-	                const bannerConfig: AdMobFreeBannerConfig = {
-	                    id: admob['banner'],
-	                    autoShow: true
-	                };
-	                admobFree.banner.config(bannerConfig);
-	                admobFree.banner.prepare()
-	                .then(() => {console.log('banner prepare');})
-	                .catch(e => console.log(e));  
-	            }
 
-	            if(admob['interstitial']) {
-	                const interstitialConfig: AdMobFreeInterstitialConfig = {
-	                    id: admob['interstitial'],
-	                    autoShow: true
-	                };
-	                admobFree.interstitial.config(interstitialConfig);
-	                admobFree.interstitial.prepare()
-	                .then(() => {console.log('interstitial prepare');
-	                }).catch(e => console.log(e));
-	            }
+				}
 	            if (google_analytics) {
 	            	ga.startTrackerWithId(google_analytics).then(() => {
 						ga.trackView(operating_system);

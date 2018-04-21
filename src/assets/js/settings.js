@@ -7,7 +7,3 @@ var date_format = "d MMM y HH:mm";
 var onesignal_app_id = "5d88b79d-2cc8-4cf4-80de-233790b594af";
 var application_language = "language";
 var google_analytics = "";
-var admob_android_banner = '';
-var admob_android_interstitial = 'ca-app-pub-4468518752177103/4305871873';
-var admob_ios_banner = '';
-var admob_ios_interstitial = 'ca-app-pub-4468518752177103/1518500692';
